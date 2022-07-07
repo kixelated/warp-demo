@@ -116,7 +116,7 @@ func (s *Session) handleStream(ctx context.Context, stream *webtransport.Receive
 		}
 
 		if msg.Throttle != nil {
-			s.setThrottle(msg.Throttle)
+			//s.setThrottle(msg.Throttle)
 		}
 	}
 }

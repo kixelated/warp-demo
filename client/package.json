@@ -2,6 +2,7 @@
   "source": "src/index.html",
   "scripts": {
     "serve": "parcel serve --https --host localhost.warp.demo --port 4444",
+    "prebuild": "rm -rf dist",
     "build": "parcel build",
     "check": "tsc --noEmit"
   },
