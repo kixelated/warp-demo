@@ -3,7 +3,7 @@
   "scripts": {
     "serve": "parcel serve --https --host localhost.warp.demo --port 4444",
     "prebuild": "rm -rf dist",
-    "build": "parcel build",
+    "build": "parcel build --public-url ./",
     "check": "tsc --noEmit"
   },
   "devDependencies": {

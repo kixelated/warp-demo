@@ -53,9 +53,6 @@ export class Player {
 
 		// async functions
 		this.receiveStreams()
-
-		// Limit to 4Mb/s
-		this.sendThrottle()
 	}
 
 	async close() {
@@ -125,13 +122,24 @@ export class Player {
 		this.updateStats()
 	}
 
-	goLive() {
+	goLive(offset: number) {
 		const ranges = this.vidRef.buffered
 		if (!ranges.length) {
 			return
 		}
 
-		this.vidRef.currentTime = ranges.end(ranges.length-1);
+		// Get the start and the end of the last chunk of the buffer.
+		const start = ranges.start(ranges.length-1);
+		const end = ranges.end(ranges.length-1)
+
+		if (start < end - offset) {
+			// Seek back offset from the end of the buffer.
+			this.vidRef.currentTime = end - offset;
+		} else {
+			// Start at the beginning of the range.
+			this.vidRef.currentTime = start;
+		}
+
 		this.vidRef.play();
 	}
 
@@ -272,10 +280,10 @@ export class Player {
 
 	updateStats() {
 		for (const child of this.statsRef.children) {
-			if (child.className == "audio buffer") {
+			if (child.classList.contains("audio")) {
 				const ranges: any = (this.audio) ? this.audio.buffered() : { length: 0 }
 				this.visualizeBuffer(child as HTMLElement, ranges)
-			} else if (child.className == "video buffer") {
+			} else if (child.classList.contains("video")) {
 				const ranges: any = (this.video) ? this.video.buffered() : { length: 0 }
 				this.visualizeBuffer(child as HTMLElement, ranges)
 			}
